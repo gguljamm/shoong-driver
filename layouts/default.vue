@@ -21,6 +21,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    position: relative;
   }
   body{
     background-color: rgb(243, 243, 243);

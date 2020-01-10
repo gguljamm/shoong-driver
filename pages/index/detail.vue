@@ -41,6 +41,7 @@ export default {
         { name: 'jimmy', passenger: 2, value: 2 },
         { name: 'kyle', passenger: 2, value: 2 },
       ],
+      scrollPosition: 0,
     };
   },
   methods: {
@@ -50,15 +51,21 @@ export default {
     },
   },
   mounted() {
+    this.scrollPosition = window.pageYOffset;
     window.document.body.style.overflow = 'hidden';
-    window.document.querySelector('html').style.overflow = 'hidden';
+    window.document.body.style.position = 'fixed';
+    window.document.body.style.top = `-${this.scrollPosition}px`;
+    window.document.body.style.width = '100%';
     setTimeout(() => {
       this.init = true;
     }, 100);
   },
   beforeDestroy() {
-    window.document.body.style.overflow = '';
-    window.document.querySelector('html').style.overflow = '';
+    window.document.body.style.removeProperty('overflow');
+    window.document.body.style.removeProperty('position');
+    window.document.body.style.removeProperty('top');
+    window.document.body.style.removeProperty('width');
+    window.scrollTo(0, this.scrollPosition);
   },
 };
 </script>
