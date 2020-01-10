@@ -69,7 +69,8 @@ export default {
   .wrapper{
     .header{
       padding: 16px 40px 4px;
-      height: 60px;
+      padding-top: calc(constant(safe-area-inset-top) + 16px);
+      padding-top: calc(env(safe-area-inset-top) + 16px);
       background-color: #FFF;
       display: flex;
       position: fixed;

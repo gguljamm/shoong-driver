@@ -144,6 +144,8 @@ export default {
     width: 100%;
     background-color: deepskyblue;
     padding: 16px 0 64px;
+    padding-top: calc(constant(safe-area-inset-top) + 16px);
+    padding-top: calc(env(safe-area-inset-top) + 16px);
     line-height: 24px;
     text-align: center;
     font-size: 20px;
@@ -154,15 +156,16 @@ export default {
       color: #000;
     }
     .date{
+      white-space: nowrap;
       font-size: 16px;
       color: #000;
       font-weight: bold;
-      top: 52px;
+      bottom: 12px;
       left: 50%;
       background-color: #FFF;
       transform: translateX(-50%);
       position: absolute;
-      width: fit-content;
+      width: auto;
       box-shadow: 0 0 2px 1px rgba(0,0,0,.1);
       padding: 8px 20px;
       text-align: center;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nuxtWrapper">
     <nuxt/>
   </div>
 </template>
@@ -32,5 +32,9 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+  }
+  .nuxtWrapper{
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
   }
 </style>

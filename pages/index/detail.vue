@@ -51,12 +51,14 @@ export default {
   },
   mounted() {
     window.document.body.style.overflow = 'hidden';
+    window.document.querySelector('html').style.overflow = 'hidden';
     setTimeout(() => {
       this.init = true;
     }, 100);
   },
   beforeDestroy() {
     window.document.body.style.overflow = '';
+    window.document.querySelector('html').style.overflow = '';
   },
 };
 </script>
@@ -85,12 +87,13 @@ export default {
         transform: translateX(0);
       }
       > div:first-of-type{
-        height: 50px;
         line-height: 50px;
         background-color: #FFF;
         position: absolute;
         left: 0;
         top: 0;
+        padding-top: constant(safe-area-inset-top);
+        padding-top: env(safe-area-inset-top);
         text-align: center;
         width: 100%;
         font-weight: bold;
@@ -98,7 +101,7 @@ export default {
         box-shadow: 0 0 2px 1px rgba(0,0,0,.1);
         > button{
           position: absolute;
-          top: 0;
+          bottom: 0;
           height: 50px;
           width: 50px;
           background-position: center center;
@@ -118,9 +121,13 @@ export default {
       > div:nth-of-type(2){
         position: absolute;
         top: 50px;
+        top: calc(constant(safe-area-inset-top) + 50px);
+        top: calc(env(safe-area-inset-top) + 50px);
         left: 0;
         right: 0;
         bottom: 116px;
+        bottom: calc(constant(safe-area-inset-bottom) + 116px);
+        bottom: calc(env(safe-area-inset-bottom) + 116px);
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         padding: 20px;
@@ -182,8 +189,9 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 116px;
         padding: 12px 20px;
+        padding-bottom: calc(constant(safe-area-inset-bottom) + 12px);
+        padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
         box-shadow: 0 0 4px 2px rgba(0,0,0,.1);
         > button{
           width: 100%;
