@@ -1,0 +1,43 @@
+{
+  "name": "bway-driver-app",
+  "version": "1.0.0",
+  "description": "bway for driver hybrid app",
+  "author": "matthew <cheolwoong.lee@bringprice.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint",
+    "app": "NODE_ENV=prod NODE_TARGET=app nuxt generate --spa",
+    "cordova-browser": "npm run app && npm run replace-relative-paths && npm run copy-cordova && npm run run-browser;",
+    "cordova-android": "npm run app && npm run replace-relative-paths && npm run copy-cordova && npm run run-android;",
+    "cordova-ios": "npm run app && npm run replace-relative-paths && npm run copy-cordova && npm run run-ios;",
+    "replace-relative-paths": "replace '/nuxtfiles/' 'nuxtfiles/' dist --recursive && replace '/assets/' 'nuxtfiles/' dist --recursive && replace '(src|\"src\")=\"/' '$1=\"../' dist --recursive && replace '(src|\"src\"):\"/' '$1:\"../' dist --recursive",
+    "copy-cordova": "cp -R dist/* cordova/www/",
+    "clear-cordova": "rm -R cordova/www/*",
+    "run-android": "cd cordova && cordova run android",
+    "run-ios": "cd cordova && cordova run ios"
+  },
+  "dependencies": {
+    "cordova": "^9.0.0",
+    "nuxt": "^2.0.0",
+    "nuxt-sass-resources-loader": "^2.0.5",
+    "replace": "^1.1.5",
+    "vue": "^2.6.11",
+    "vue-cookies": "^1.6.1"
+  },
+  "devDependencies": {
+    "eslint-friendly-formatter": "^4.0.1",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-vue": "^6.1.2",
+    "node-sass": "^4.13.0",
+    "sass-loader": "^8.0.0"
+  }
+}
