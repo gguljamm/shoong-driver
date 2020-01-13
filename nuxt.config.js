@@ -46,5 +46,14 @@ module.exports = {
   ],
   router: {
     mode: 'hash',
+    extendRoutes(routes, resolve) {
+      let parent = routes.find(route => route.path === '/')
+      parent.children = [];
+      parent.children.push({
+        name: 'index-detail',
+        path: '/detail',
+        component: resolve(__dirname, 'components/modal.vue'),
+      });
+    },
   },
 };
