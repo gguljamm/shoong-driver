@@ -72,6 +72,7 @@ export default {
       padding-top: calc(constant(safe-area-inset-top) + 16px);
       padding-top: calc(env(safe-area-inset-top) + 16px);
       background-color: #FFF;
+      background-color: #FFF;
       display: flex;
       position: fixed;
       top: 0;
