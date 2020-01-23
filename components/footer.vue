@@ -32,6 +32,7 @@ export default {
     padding: 0;
     background-color: #FFF;
     > li{
+      font-size: 13px;
       background-color: #FFF;
       flex: 33.33%;
       cursor: pointer;

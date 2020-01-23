@@ -138,12 +138,17 @@ export default {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         padding: 20px;
+        > h3{
+          font-size: 15px;
+        }
         .content{
           h3{
-
+            margin-top: 8px;
+            font-size: 15px;
           }
           ul{
             padding: 24px 0;
+            font-size: 15px;
             li{
               display: flex;
               height: 32px;

@@ -180,6 +180,7 @@ export default {
       box-shadow: 0 0 4px 2px rgba(0,0,0,.1);
       padding: 8px;
       padding-top: 40px;
+      font-size: 15px;
       .caption{
         box-shadow: 0 0 2px 1px rgba(0,0,0,.1);
         margin-top: -64px;
@@ -213,6 +214,7 @@ export default {
         }
         > div{
           flex: auto;
+          line-height: 20px;
           &:first-of-type{
             position: relative;
             &:before{

@@ -5,14 +5,13 @@
 </template>
 
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
-  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR');
+  @import url('https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css');
 
 
   html {
-    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    font-family: 'NanumSquare', sans-serif;
     font-size: 16px;
-    color: #4a4a4a;
+    color: #131212;
     word-spacing: 1px;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
