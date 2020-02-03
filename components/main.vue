@@ -4,7 +4,7 @@
       안녕하세요. <strong>{{ user }}</strong> 크루님
       <div class="date">{{ date }}</div>
     </div>
-    <div class="content">
+    <div class="content" v-if="schedule && schedule.length > 0">
       <ul v-for="(x, index) in schedule" :key="index">
         <div class="caption">
           {{ x.departure }} {{ x.route === 0 ? '종로 to 인천공항 1터미널' : '인천공항 1터미널 to 종로' }}<br>
@@ -13,10 +13,10 @@
         <li v-for="(y, index2) in x.stops" :key="index2" :ref="`li_${index}_${index2}`" @click="openDetail(index, index2)"
           :class="{
             airport: (x.route === 1 && index2 === 0) || (x.route === 0 && index2 === x.stops.length - 1),
-            active: active === `${index}_${index2}`
+            active: active === `${index}_${index2}`,
           }"
         >
-          <div><div></div></div>
+          <div><div :class="{ isMoving }"></div></div>
           <div>{{ y.time }}</div>
           <div>
             {{ y.place }}<br>
@@ -24,6 +24,9 @@
           </div>
         </li>
       </ul>
+    </div>
+    <div v-else class="content">
+      <h3 style="padding-top: 40px; text-align: center">금일 예정된 스케줄이 없습니다.</h3>
     </div>
   </div>
 </template>
@@ -38,6 +41,7 @@ export default {
       interval: null,
       active: '0_0',
       timeout: '',
+      isMoving: false,
     };
   },
   methods: {
@@ -45,20 +49,21 @@ export default {
       this.$emit('open-detail', index, index2);
     },
     setTime() {
-      // const date = new Date('2020-01-09T21:51:00');
+      // const date = new Date('2020-01-09T10:54:00');
       const date = new Date();
       this.date = `${date.getMonth() + 1}월 ${date.getDate()}일 (${this.dow[date.getDay()]}) ${this.zeros(date.getHours())}시 ${this.zeros(date.getMinutes())}분`;
       const time = parseInt(`${date.getHours()}${this.zeros(date.getMinutes())}`, 10);
       for (let x = 0; x < this.schedule.length; x += 1) {
-        if (time <= parseInt(this.schedule[x].arrival.replace(':', ''), 10)) {
-          let active = 0;
+        if (parseInt(this.schedule[x].arrival.replace(':', ''), 10) >= time) {
           for (let y = 0; y < this.schedule[x].stops.length; y += 1) {
-            if (time < parseInt(this.schedule[x].stops[y].time.replace(':', ''), 10)) {
+            const stopTime = parseInt(this.schedule[x].stops[y].time.replace(':', ''), 10);
+            if (stopTime >= time) {
+              this.active = `${x}_${y}`;
+              const strTime = this.schedule[x].stops[y].time.split(':');
+              this.isMoving = ((strTime[0] * 60) + parseInt(strTime[1], 10)) - ((date.getHours() * 60) + date.getMinutes()) > 5;
               break;
             }
-            active = y;
           }
-          this.active = `${x}_${active}`;
           break;
         }
       }
@@ -75,10 +80,12 @@ export default {
       return zero + newN;
     },
     getActiveTop() {
-      window.scrollTo({
-        top: this.$refs[`li_${this.active}`][0].offsetTop - (window.innerHeight / 2) + 52,
-        behavior: 'smooth',
-      });
+      if (this.schedule.length > 0) {
+        window.scrollTo({
+          top: this.$refs[`li_${this.active}`][0].offsetTop - (window.innerHeight / 2) + 52,
+          behavior: 'smooth',
+        });
+      }
     },
     moveScroll() {
       if (this.timeout) {
@@ -120,7 +127,7 @@ export default {
     text-align: center;
     font-size: 20px;
     font-weight: bold;
-    z-index: 2;
+    z-index: 10;
     box-shadow: 0 0 4px 2px rgba(0,0,0,.2);
     > strong{
       color: #000;
@@ -175,9 +182,13 @@ export default {
           top: 30px;
           left: 23px;
           height: 100%;
+          z-index: 2;
         }
         &:last-of-type:before{
           display: none;
+        }
+        &:not(:first-of-type) > div:first-of-type > div.isMoving{
+          margin-top: -35px;
         }
         &.airport > div:first-of-type:before{
           background-color: rgb(255, 127, 120);
@@ -202,6 +213,8 @@ export default {
               height: 12px;
               border-radius: 6px;
               background-color: rgb(255, 210, 66);
+              position: relative;
+              z-index: 3;
             }
             flex: 0 0 40px;
             > div{
@@ -214,6 +227,7 @@ export default {
               height: 24px;
               background-size: cover;
               margin-top: 3px;
+              z-index: 5;
               animation: move-bus 2s infinite linear;
             }
           }

@@ -3,9 +3,9 @@
     <div :class="init ? 'open' : ''">
       <div><button @click="$router.back()"></button>상세 정보<button @click="openMap()"></button></div>
       <div>
-        <h3>1월 10일 (금) 12:00 | 인천공항 제1터미널</h3>
+        <h3>{{ nowDate }} {{ schedule.stops[stopNum].time }} | {{ schedule.stops[stopNum].place }}</h3>
         <div class="content">
-          <h3>탑승 예정 인원 총 5인</h3>
+          <h3>탑승 예정 인원 총 {{ schedule.stops[stopNum].passenger }}인</h3>
           <ul>
             <li v-for="(x, index) in detailSchedule" :key="index">
               <div>{{ x.name }}</div>
@@ -24,8 +24,8 @@
         </div>
       </div>
       <div>
-        <button class="add" @click="$emit('open-detail-popup', 'add')">현장 인원 추가 (잔여석: 8)</button>
-        <button class="submit" @click="$emit('open-detail-popup', 'confirm')">출발</button>
+        <button class="add" @click="$emit('open-detail-popup', 'add')">현장 인원 추가 (잔여석: {{ schedule.passenger.max - schedule.passenger.now }})</button>
+        <button class="submit" @click="$emit('open-detail-popup', 'confirm')">완료</button>
       </div>
     </div>
   </div>
@@ -33,8 +33,12 @@
 
 <script>
 export default {
+  props: ['schedule', 'stopNum'],
   data() {
+    const date = new Date();
+    const dow = ['일', '월', '화', '수', '목', '금', '토'];
     return {
+      nowDate: `${date.getMonth() + 1}월 ${date.getDate()}일 (${dow[date.getDay()]})`,
       init: false,
       detailSchedule: [
         { name: 'ted', passenger: 1, value: 1 },

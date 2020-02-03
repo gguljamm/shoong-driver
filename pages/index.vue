@@ -9,8 +9,10 @@
     <log-in v-else @set-user="setUser"></log-in>
     <Footer v-if="user"></Footer>
 <!--    <nuxt-child></nuxt-child>-->
-    <Detail v-if="$route.path.indexOf('/detail') >= 0"
+    <Detail v-if="$route.path.indexOf('/detail') >= 0 && schedule[index] && schedule[index].stops[index2]"
       @open-detail-popup="openDetailPopup"
+      :schedule="schedule[index]"
+      :stopNum="index2"
     ></Detail>
     <Modal
       v-if="$route.params.popup"
@@ -37,6 +39,8 @@ export default {
     return {
       init: false,
       user: null,
+      index: 0,
+      index2: 0,
       schedule: [
         /* eslint-disable */
         { departure: '09:00', arrival: '11:00', route: 0, passenger: { max: 13, now: 7 }, stops: [
@@ -77,7 +81,8 @@ export default {
       this.user = val;
     },
     openDetail(index, index2) {
-      console.log(index, index2);
+      this.index = index;
+      this.index2 = index2;
       this.$router.push('/detail');
     },
     openDetailPopup(flag) {

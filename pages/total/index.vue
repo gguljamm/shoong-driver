@@ -1,9 +1,9 @@
 <template>
   <div v-if="init" class="wrapper">
     <div class="header">
-      <button></button>
-      <div>{{ selectedSchedule }}</div>
-      <button></button>
+      <button @click="changeDate(false)"></button>
+      <div>{{ strDate }}</div>
+      <button @click="changeDate(true)"></button>
     </div>
     <ul>
       <li>
@@ -43,10 +43,22 @@ export default {
     return {
       init: false,
       schedule,
-      selectedSchedule: `${new Date().getFullYear()}-${this.zeros(new Date().getMonth() + 1)}-${this.zeros(new Date().getDate())}`,
+      selectedSchedule: new Date(),
+      strDate: this.setStrDate(new Date()),
     };
   },
   methods: {
+    setStrDate(date) {
+      return `${date.getFullYear()}-${this.zeros(date.getMonth() + 1)}-${this.zeros(date.getDate())}`;
+    },
+    changeDate(isAdd) {
+      if (isAdd) {
+        this.selectedSchedule.setDate(this.selectedSchedule.getDate() + 1);
+      } else {
+        this.selectedSchedule.setDate(this.selectedSchedule.getDate() - 1);
+      }
+      this.strDate = this.setStrDate(this.selectedSchedule);
+    },
     zeros(n) {
       let zero = '';
       let newN = n;
