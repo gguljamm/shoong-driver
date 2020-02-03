@@ -10,7 +10,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'hybrid app for Shoong crew' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css' },
     ]
   },
   /*
