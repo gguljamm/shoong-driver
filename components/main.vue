@@ -10,10 +10,13 @@
           {{ x.departure }} {{ x.route === 0 ? '종로 to 인천공항 1터미널' : '인천공항 1터미널 to 종로' }}<br>
           탑승인원 ({{ x.passenger.now }}/{{ x.passenger.max }})
         </div>
-        <li v-for="(y, index2) in x.stops" :key="index2" :ref="`li_${index}_${index2}`" @click="openDetail()"
-          :class="(x.route === 1 && index2 === 0) || (x.route === 0 && index2 === x.stops.length - 1) ? 'airport' : ''"
+        <li v-for="(y, index2) in x.stops" :key="index2" :ref="`li_${index}_${index2}`" @click="openDetail(index, index2)"
+          :class="{
+            airport: (x.route === 1 && index2 === 0) || (x.route === 0 && index2 === x.stops.length - 1),
+            active: active === `${index}_${index2}`
+          }"
         >
-          <div><div v-show="active === `${index}_${index2}`"></div></div>
+          <div><div></div></div>
           <div>{{ y.time }}</div>
           <div>
             {{ y.place }}<br>
@@ -27,52 +30,19 @@
 
 <script>
 export default {
-  props: ['user'],
+  props: ['user', 'schedule'],
   data() {
     return {
       date: '',
       dow: ['일', '월', '화', '수', '목', '금', '토'],
       interval: null,
       active: '0_0',
-      schedule: [
-        /* eslint-disable */
-        { departure: '09:00', arrival: '11:00', route: 0, passenger: { max: 13, now: 7 }, stops: [
-          { time: '09:00', place: '센트럴 관광호텔 (스팟1)', passenger: 2 },
-          { time: '09:10', place: '호텔 베뉴지 (스팟2)', passenger: 2 },
-          { time: '09:20', place: '둘로스빌딩 앞 (스팟3)', passenger: 2 },
-          { time: '09:30', place: '몽호텔 앞 (스팟4)', passenger: 1 },
-          { time: '11:00', place: '인천공항 1터미널', passenger: 7 },
-        ]},
-        { departure: '12:00', arrival: '14:00', route: 1, passenger: { max: 13, now: 5 }, stops: [
-          { time: '12:00', place: '인천공항 1터미널', passenger: 5 },
-          { time: '13:30', place: '센트럴 관광호텔 (스팟1)', passenger: 1 },
-          { time: '13:40', place: '호텔 베뉴지 (스팟2)', passenger: 1 },
-          { time: '13:50', place: '둘로스빌딩 앞 (스팟3)', passenger: 1 },
-          { time: '14:00', place: '몽호텔 앞 (스팟4)', passenger: 2 },
-
-        ]},
-        { departure: '17:00', arrival: '19:00', route: 0, passenger: { max: 13, now: 12 }, stops: [
-          { time: '17:00', place: '센트럴 관광호텔 (스팟1)', passenger: 6 },
-          { time: '17:10', place: '호텔 베뉴지 (스팟2)', passenger: 2 },
-          { time: '17:20', place: '둘로스빌딩 앞 (스팟3)', passenger: 2 },
-          { time: '17:30', place: '몽호텔 앞 (스팟4)', passenger: 2 },
-          { time: '19:00', place: '인천공항 1터미널', passenger: 12 },
-        ]},
-        { departure: '20:00', arrival: '22:00', route: 1, passenger: { max: 13, now: 10 }, stops: [
-          { time: '20:00', place: '인천공항 1터미널', passenger: 10 },
-          { time: '21:30', place: '센트럴 관광호텔 (스팟1)', passenger: 2 },
-          { time: '21:40', place: '호텔 베뉴지 (스팟2)', passenger: 3 },
-          { time: '21:50', place: '둘로스빌딩 앞 (스팟3)', passenger: 4 },
-          { time: '22:00', place: '몽호텔 앞 (스팟4)', passenger: 1 },
-        ]},
-        /* eslint-enable */
-      ],
       timeout: '',
     };
   },
   methods: {
-    openDetail() {
-      this.$router.push('/detail');
+    openDetail(index, index2) {
+      this.$emit('open-detail', index, index2);
     },
     setTime() {
       // const date = new Date('2020-01-09T21:51:00');
@@ -212,6 +182,12 @@ export default {
         &.airport > div:first-of-type:before{
           background-color: rgb(255, 127, 120);
         }
+        &.active{
+          background-color: papayawhip;
+          > div:first-of-type > div{
+            display: block;
+          }
+        }
         > div{
           flex: auto;
           line-height: 20px;
@@ -229,7 +205,7 @@ export default {
             }
             flex: 0 0 40px;
             > div{
-              background-color: #FFF;
+              display: none;
               top: 0;
               left: 0;
               position: absolute;

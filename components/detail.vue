@@ -24,8 +24,8 @@
         </div>
       </div>
       <div>
-        <button class="add">현장 인원 추가 (잔여석: 8)</button>
-        <button class="submit">출발</button>
+        <button class="add" @click="$emit('open-detail-popup', 'add')">현장 인원 추가 (잔여석: 8)</button>
+        <button class="submit" @click="$emit('open-detail-popup', 'confirm')">출발</button>
       </div>
     </div>
   </div>

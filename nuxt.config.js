@@ -53,6 +53,11 @@ module.exports = {
         name: 'index-detail',
         path: '/detail',
         component: resolve(__dirname, 'components/modal.vue'),
+        children: [{
+          name: 'index-detail-popup',
+          path: ':popup',
+          component: resolve(__dirname, 'components/modal.vue'),
+        }],
       });
     },
   },
