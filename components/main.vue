@@ -79,12 +79,15 @@ export default {
       }
       return zero + newN;
     },
-    getActiveTop() {
+    getActiveTop(isMount) {
       if (this.schedule.length > 0) {
-        window.scrollTo({
+        const obj = {
           top: this.$refs[`li_${this.active}`][0].offsetTop - (window.innerHeight / 2) + 52,
-          behavior: 'smooth',
-        });
+        };
+        if (!isMount) {
+          obj.behavior = 'smooth';
+        }
+        window.scrollTo(obj);
       }
     },
     moveScroll() {
@@ -98,7 +101,7 @@ export default {
   mounted() {
     this.setTime();
     this.interval = setInterval(this.setTime, 1000);
-    this.$nextTick(this.getActiveTop);
+    this.$nextTick(this.getActiveTop(true));
     window.addEventListener('touchend', this.moveScroll);
   },
   beforeDestroy() {
@@ -154,7 +157,7 @@ export default {
     ul{
       margin-top: 40px;
       background-color: #FFF;
-      box-shadow: 0 0 4px 2px rgba(0,0,0,.1);
+      box-shadow: 0 0 2px 1px rgba(0,0,0,.1);
       padding: 8px;
       padding-top: 40px;
       font-size: 15px;

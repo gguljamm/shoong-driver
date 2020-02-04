@@ -2,7 +2,9 @@
   <div v-if="init" class="wrapper">
     <div class="header">
       <button @click="changeDate(false)"></button>
-      <div>{{ strDate }}</div>
+      <div :class="{
+        today: strDate === today
+      }">{{ strDate }}</div>
       <button @click="changeDate(true)"></button>
     </div>
     <ul>
@@ -45,11 +47,13 @@ export default {
       schedule,
       selectedSchedule: new Date(),
       strDate: this.setStrDate(new Date()),
+      today: this.setStrDate(new Date()),
     };
   },
   methods: {
     setStrDate(date) {
-      return `${date.getFullYear()}-${this.zeros(date.getMonth() + 1)}-${this.zeros(date.getDate())}`;
+      const dow = ['일', '월', '화', '수', '목', '금', '토'];
+      return `${date.getFullYear()}-${this.zeros(date.getMonth() + 1)}-${this.zeros(date.getDate())} (${dow[date.getDay()]})`;
     },
     changeDate(isAdd) {
       if (isAdd) {
@@ -106,6 +110,9 @@ export default {
         line-height: 40px;
         height: 40px;
         font-weight: bold;
+        &.today{
+          color: deepskyblue;
+        }
       }
     }
     > ul:not(.footer){
