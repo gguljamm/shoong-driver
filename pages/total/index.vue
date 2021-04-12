@@ -1,9 +1,11 @@
 <template>
   <div v-if="init" class="wrapper">
     <div class="header">
-      <button></button>
-      <div>{{ selectedSchedule }}</div>
-      <button></button>
+      <button @click="changeDate(false)"></button>
+      <div :class="{
+        today: strDate === today
+      }">{{ strDate }}</div>
+      <button @click="changeDate(true)"></button>
     </div>
     <ul>
       <li>
@@ -43,10 +45,24 @@ export default {
     return {
       init: false,
       schedule,
-      selectedSchedule: `${new Date().getFullYear()}-${this.zeros(new Date().getMonth() + 1)}-${this.zeros(new Date().getDate())}`,
+      selectedSchedule: new Date(),
+      strDate: this.setStrDate(new Date()),
+      today: this.setStrDate(new Date()),
     };
   },
   methods: {
+    setStrDate(date) {
+      const dow = ['일', '월', '화', '수', '목', '금', '토'];
+      return `${date.getFullYear()}-${this.zeros(date.getMonth() + 1)}-${this.zeros(date.getDate())} (${dow[date.getDay()]})`;
+    },
+    changeDate(isAdd) {
+      if (isAdd) {
+        this.selectedSchedule.setDate(this.selectedSchedule.getDate() + 1);
+      } else {
+        this.selectedSchedule.setDate(this.selectedSchedule.getDate() - 1);
+      }
+      this.strDate = this.setStrDate(this.selectedSchedule);
+    },
     zeros(n) {
       let zero = '';
       let newN = n;
@@ -69,7 +85,8 @@ export default {
   .wrapper{
     .header{
       padding: 16px 40px 4px;
-      height: 60px;
+      padding-top: calc(constant(safe-area-inset-top) + 16px);
+      padding-top: calc(env(safe-area-inset-top) + 16px);
       background-color: #FFF;
       display: flex;
       position: fixed;
@@ -93,6 +110,9 @@ export default {
         line-height: 40px;
         height: 40px;
         font-weight: bold;
+        &.today{
+          color: deepskyblue;
+        }
       }
     }
     > ul:not(.footer){

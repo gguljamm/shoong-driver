@@ -21,7 +21,7 @@ export default {
 
 <style lang="scss" scoped>
   .footer{
-    z-index: 2;
+    z-index: 10;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -30,7 +30,9 @@ export default {
     display: flex;
     margin: 0;
     padding: 0;
+    background-color: #FFF;
     > li{
+      font-size: 13px;
       background-color: #FFF;
       flex: 33.33%;
       cursor: pointer;

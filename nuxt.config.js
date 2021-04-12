@@ -10,7 +10,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'hybrid app for Shoong crew' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css' },
     ]
   },
   /*
@@ -46,5 +47,19 @@ module.exports = {
   ],
   router: {
     mode: 'hash',
+    extendRoutes(routes, resolve) {
+      let parent = routes.find(route => route.path === '/')
+      parent.children = [];
+      parent.children.push({
+        name: 'index-detail',
+        path: '/detail',
+        component: resolve(__dirname, 'components/modal.vue'),
+        children: [{
+          name: 'index-detail-popup',
+          path: ':popup',
+          component: resolve(__dirname, 'components/modal.vue'),
+        }],
+      });
+    },
   },
 };

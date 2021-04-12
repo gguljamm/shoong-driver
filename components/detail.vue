@@ -3,9 +3,9 @@
     <div :class="init ? 'open' : ''">
       <div><button @click="$router.back()"></button>상세 정보<button @click="openMap()"></button></div>
       <div>
-        <h3>1월 10일 (금) 12:00 | 인천공항 제1터미널</h3>
+        <h3>{{ nowDate }} {{ schedule.stops[stopNum].time }} | {{ schedule.stops[stopNum].place }}</h3>
         <div class="content">
-          <h3>탑승 예정 인원 총 5인</h3>
+          <h3>탑승 예정 인원 총 {{ schedule.stops[stopNum].passenger }}인</h3>
           <ul>
             <li v-for="(x, index) in detailSchedule" :key="index">
               <div>{{ x.name }}</div>
@@ -24,8 +24,8 @@
         </div>
       </div>
       <div>
-        <button class="add">현장 인원 추가 (잔여석: 8)</button>
-        <button class="submit">출발</button>
+        <button class="add" @click="$emit('open-detail-popup', 'add')">현장 인원 추가 (잔여석: {{ schedule.passenger.max - schedule.passenger.now }})</button>
+        <button class="submit" @click="$emit('open-detail-popup', 'confirm')">완료</button>
       </div>
     </div>
   </div>
@@ -33,14 +33,19 @@
 
 <script>
 export default {
+  props: ['schedule', 'stopNum'],
   data() {
+    const date = new Date();
+    const dow = ['일', '월', '화', '수', '목', '금', '토'];
     return {
+      nowDate: `${date.getMonth() + 1}월 ${date.getDate()}일 (${dow[date.getDay()]})`,
       init: false,
       detailSchedule: [
         { name: 'ted', passenger: 1, value: 1 },
         { name: 'jimmy', passenger: 2, value: 2 },
         { name: 'kyle', passenger: 2, value: 2 },
       ],
+      scrollPosition: 0,
     };
   },
   methods: {
@@ -50,13 +55,21 @@ export default {
     },
   },
   mounted() {
+    this.scrollPosition = window.pageYOffset;
     window.document.body.style.overflow = 'hidden';
+    window.document.body.style.position = 'fixed';
+    window.document.body.style.top = `-${this.scrollPosition}px`;
+    window.document.body.style.width = '100%';
     setTimeout(() => {
       this.init = true;
     }, 100);
   },
   beforeDestroy() {
-    window.document.body.style.overflow = '';
+    window.document.body.style.removeProperty('overflow');
+    window.document.body.style.removeProperty('position');
+    window.document.body.style.removeProperty('top');
+    window.document.body.style.removeProperty('width');
+    window.scrollTo(0, this.scrollPosition);
   },
 };
 </script>
@@ -85,12 +98,13 @@ export default {
         transform: translateX(0);
       }
       > div:first-of-type{
-        height: 50px;
         line-height: 50px;
         background-color: #FFF;
         position: absolute;
         left: 0;
         top: 0;
+        padding-top: constant(safe-area-inset-top);
+        padding-top: env(safe-area-inset-top);
         text-align: center;
         width: 100%;
         font-weight: bold;
@@ -98,7 +112,7 @@ export default {
         box-shadow: 0 0 2px 1px rgba(0,0,0,.1);
         > button{
           position: absolute;
-          top: 0;
+          bottom: 0;
           height: 50px;
           width: 50px;
           background-position: center center;
@@ -118,18 +132,27 @@ export default {
       > div:nth-of-type(2){
         position: absolute;
         top: 50px;
+        top: calc(constant(safe-area-inset-top) + 50px);
+        top: calc(env(safe-area-inset-top) + 50px);
         left: 0;
         right: 0;
         bottom: 116px;
+        bottom: calc(constant(safe-area-inset-bottom) + 116px);
+        bottom: calc(env(safe-area-inset-bottom) + 116px);
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         padding: 20px;
+        > h3{
+          font-size: 15px;
+        }
         .content{
           h3{
-
+            margin-top: 8px;
+            font-size: 15px;
           }
           ul{
             padding: 24px 0;
+            font-size: 15px;
             li{
               display: flex;
               height: 32px;
@@ -182,8 +205,9 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 116px;
         padding: 12px 20px;
+        padding-bottom: calc(constant(safe-area-inset-bottom) + 12px);
+        padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
         box-shadow: 0 0 4px 2px rgba(0,0,0,.1);
         > button{
           width: 100%;
