@@ -1,6 +1,8 @@
-# bway-driver-app
+# shoong-driver-app
 
-> bway for driver hybrid app
+> shoong for driver hybrid app
+> 슝 드라이버용 앱
+> cordova AOS/IOS 지원
 
 ## Build Setup
 
